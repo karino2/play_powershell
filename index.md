@@ -13,7 +13,9 @@ Documents\powershell_work> explorer .
 ```
 
 なお、Documentsを移動している奇特な人は以下だが、そういう人はこのドキュメントの対象じゃないでしょう。
+```
 > cd ([Environment]::GetFolderPath("Personal"))
+```
 
 
 
