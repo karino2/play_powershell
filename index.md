@@ -153,7 +153,7 @@ Version         : 10.0.18362
 # Wn10、まぁそれはそう。
 
 # 最近あてたWindows Update
-PS> Get-CimInstance -Class Win32_QuickFixEngineering | sort -Descending -Property InstalledOn | head
+PS> Get-CimInstance -Class Win32_QuickFixEngineering | sort -Descending -Property InstalledOn | select -f 5
 
 Source        Description      HotFixID      InstalledBy          InstalledOn
 ------        -----------      --------      -----------          -----------
