@@ -83,7 +83,18 @@ PS> 163/365
 
 まだ44.7%しか終わってないじゃないか。騙されるところだったぜ。
 
+苔鯖のLTLを6個見る。
+```
+PS> Invoke-WebRequest "https://mostodon.cloud/api/v1/timelines/public?local=1&limit=6" | %{ $_.Content } | ConvertFrom-Json | %{ $names = $_.account.username; $conts = $_.content; 0..($names.Length-1) | %{ "$($names[$_]): $($conts[$_])"} }
+raito: <p>微妙ですね</p>
+raito: <p>ファナチカルの高級ガチャでSaints Row4出てきた</p>
+hiyo_rock: <p>作業途中で昼寝すっかってなって起きたら作業内容忘れてるのクソ仕様だな</p>
+rakuda: <p>140、オレンジレンジくらい</p>
+hiyo_rock: <p>おはよう</p>
+yum: <p>音ゲーマーの感覚でBPM140前後が中速って前提で会話してたら噛み合わなかった</p>
+```
 
+csvを取ってきてちょろっと処理。
 ```
 # 個人的に私がメンテしている日本の実質GDPのCSV
 PS> invoke-webrequest -OutFile gdp.csv -Uri "https://docs.google.com/spreadsheet/pub?key=0AnKwf3jHs-oIdGVESWc4OGs2cVJxYVFLaTFZNHhOLVE&single=true&gid=0&output=csv"
