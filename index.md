@@ -52,7 +52,7 @@ PS> 163/365
 
 どんなマシン使ってるの？
 ```
-PS> Get-WmiObject -Class Win32_Processor
+PS> Get-CimInstance -Class Win32_Processor | fl
 
 
 Caption           : Intel64 Family 6 Model 61 Stepping 4
@@ -64,7 +64,7 @@ SocketDesignation : IC1
 
 
 
-PS> Get-WmiObject -Class Win32_Processor | Select-Object -Property Name, Number*
+PS> Get-CimInstance -Class Win32_Processor | Select-Object -Property Name, Number*
 
 Name                                  NumberOfCores NumberOfEnabledCore NumberOfLogicalProcessors
 ----                                  ------------- ------------------- -------------------------
@@ -72,7 +72,7 @@ Intel(R) Processor 5Y70 CPU @ 1.10GHz             2                   2         
 # 2コア。
 
 #メモリは？
-PS> Get-WmiObject -Class Win32_PhysicalMemory | measure-object capacity -Sum
+PS> Get-CimInstance -Class Win32_PhysicalMemory | measure-object capacity -Sum
 
 
 Count    : 3
@@ -104,7 +104,7 @@ C: 464.578170776367GB
 # 464GBだって。
 
 # OSは？
-> Get-WmiObject -Class Win32_OperatingSystem
+PS> Get-CimInstance -Class Win32_OperatingSystem | fl
 
 
 SystemDirectory : C:\WINDOWS\system32
@@ -117,7 +117,7 @@ Version         : 10.0.18362
 # Wn10、まぁそれはそう。
 
 # 最近あてたWindows Update
-PS> Get-WmiObject -Class Win32_QuickFixEngineering | sort -Descending -Property InstalledOn | head
+PS> Get-CimInstance -Class Win32_QuickFixEngineering | sort -Descending -Property InstalledOn | head
 
 Source        Description      HotFixID      InstalledBy          InstalledOn
 ------        -----------      --------      -----------          -----------
@@ -131,18 +131,18 @@ LETS-NOTE-RZ4 Security Update  KB4524244     NT AUTHORITY\SYSTEM  2020/02/14 0:0
 
 
 # BIOSは？（ってプログラマしか興味持たないか）
-PS> Get-WmiObject -Class Win32_BIOS
+PS> Get-CimInstance -Class Win32_BIOS
 
 
 SMBIOSBIOSVersion : V1.00L14
 Manufacturer      : American Megatrends Inc.
 Name              : V1.00L14
-SerialNumber      : 5CKSA32887
+SerialNumber      : 5CKSA3XXXX
 Version           : MATBIO - 1072009
 
 
 # どこ製？
-PS> Get-WmiObject -Class Win32_ComputerSystem
+PS> Get-CimInstance -Class Win32_ComputerSystem | fl
 
 
 Domain              : WORKGROUP
@@ -152,6 +152,37 @@ Name                : LETS-NOTE-RZ4
 PrimaryOwnerName    : CF-RZ4
 TotalPhysicalMemory : 4180226048
 
+# いつからつけてる？
+PS> Get-CimInstance -Class Win32_LogonSession | fl
+
+
+AuthenticationPackage : CloudAP
+LogonId               : 539420
+LogonType             : 2
+Name                  :
+StartTime             : 20200612132107.002739+540
+Status                :
+
+AuthenticationPackage : CloudAP
+LogonId               : 539165
+LogonType             : 2
+Name                  :
+StartTime             : 20200612132106.987116+540
+
+# 2020年6月12日から。
+```
+
+デスクトップに「苔鯖notepad」という名前のショートカットを作る。中身は単なるnotepad。
+
+```
+PS> $desktop = [Environment]::GetFolderPath("Desktop")
+PS> $shell = new-object -ComObject WScript.Shell
+PS> $shortcut = $shell.CreateShortcut("$desktop\苔鯖notepad.lnk")
+PS> $shortcut.TargetPath = "C:\Windows\notepad.exe"
+PS> $shortcut.Save()
+
+# これでデスクトップに「苔鯖notepad」というショートカットが出来ていて、ダブルクリックするとnotepad.exeが立ち上がるはずです。
+# 試したらあとは普通に手動で削除してください。
 ```
 
 chromeがどれくらいメモリを使っているか。
@@ -185,6 +216,15 @@ PS> 1676832768/1GB
 # 以下みたいな書き方も出来る。
 PS> 1676832768/(1024*1024*1024)
 1.56167221069336
+```
+
+電卓を立ち上げて、電卓を殺す
+```
+# 電卓を立ち上げて
+PS> calc
+
+# 電卓を閉じる。calcで始まる他のプロセスがあったら閉じちゃうので注意。
+PS> get-process -Name calc* | Stop-Process
 ```
 
 
