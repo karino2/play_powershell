@@ -91,17 +91,17 @@ PS> 163/365
 PS> invoke-webrequest -OutFile gdp.csv -Uri "https://docs.google.com/spreadsheet/pub?key=0AnKwf3jHs-oIdGVESWc4OGs2cVJxYVFLaTFZNHhOLVE&single=true&gid=0&output=csv"
 
 # 2010年以上の平均を見る。
-PS> Get-Content gdp.csv | select -Skip 1 | ?{ [int]$_.Split(",")[0] -gt 2010 } | %{ [double]$_.Split(",")[1] } | Measure-Object -Average
+PS> > Get-Content gdp.csv | select -Skip 1 | %{ Write-Output(,$_.Split(",")) } | ?{ [int]$_[0] -ge 2010 } | %{ $_[1] } | measure-object -average
 
 
-Count    : 8
-Average  : 515607.1375
+Count    : 9
+Average  : 513083.244444444
 Sum      :
 Maximum  :
 Minimum  :
 Property :
 
-# 515兆円。結構増えたね。
+# 513兆円。結構増えたね。
 
 # 後始末
 PS> rm gdp.csv
