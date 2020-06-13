@@ -86,6 +86,27 @@ PS> 163/365
 まだ44.7%しか終わってないじゃないか。騙されるところだったぜ。
 
 
+```
+# 個人的に私がメンテしている日本の実質GDPのCSV
+PS> invoke-webrequest -OutFile gdp.csv -Uri "https://docs.google.com/spreadsheet/pub?key=0AnKwf3jHs-oIdGVESWc4OGs2cVJxYVFLaTFZNHhOLVE&single=true&gid=0&output=csv"
+
+# 2010年以上の平均を見る。
+PS> Get-Content gdp.csv | select -Skip 1 | ?{ [int]$_.Split(",")[0] -gt 2010 } | %{ [double]$_.Split(",")[1] } | Measure-Object -Average
+
+
+Count    : 8
+Average  : 515607.1375
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+
+# 515兆円。結構増えたね。
+
+# 後始末
+PS> rm gdp.csv
+```
+
 どんなマシン使ってるの？
 ```
 PS> Get-CimInstance -Class Win32_Processor | fl
