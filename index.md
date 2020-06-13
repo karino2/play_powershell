@@ -1,11 +1,158 @@
-なんか書く。
 
+- [このシリーズのコンセプト](concept.md)
+
+
+ファイルのサイズの合計
+```
+PS> ls
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----       2020/02/10     17:42             33 .gitignore
+-a----       2020/02/10     17:42           7987 index.md
+-a----       2020/02/10     17:42          27676 linux_cmd.md
+-a----       2020/02/10     17:42           1092 machine_admin.md
+-a----       2020/02/10     17:42            254 other_cmd.md
+-a----       2020/02/10     17:42          24968 shell_intro.md
+-a----       2020/02/10     17:42            192 sync.sh
+-a----       2020/02/10     17:42          41712 text_op.md
+-a----       2020/02/10     17:42           1793 _config.yml
+
+PS> ls | measure-object Length -Sum
+
+Count    : 9
+Average  :
+Sum      : 105707
+Maximum  :
+Minimum  :
+Property : Length
+```
+
+chromeがどれくらいメモリを使っているか。
+```
+PS> Get-Process | ?{ $_ -match "chrome" }
+
+Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
+-------  ------    -----      -----     ------     --  -- -----------
+    283      19    46444      43444      29.64    316   1 chrome
+    384      28    59048      72088      11.91    808   1 chrome
+    233      16    19632      26776       3.11   1832   1 chrome
+    329      20    43644      66788      12.23   3452   1 chrome
+    322      21    44920      54024      59.36   3460   1 chrome
+...
+
+PS> Get-Process | ?{ $_ -match "chrome" } | measure-object WS -Sum
+
+Count    : 34
+Average  :
+Sum      : 1676832768
+Maximum  :
+Minimum  :
+Property : WS
+
+# 1676832768って何ギガ？
+PS> 1676832768/(1024*1024*1024)
+1.56167221069336
+
+# 1.56GBだそうで。
+```
+
+
+
+今日は何日？
+```
+PS> Get-Date
+
+2020年6月13日 15:03:22
+
+PS> $dt = Get-Date
+PS> $dt.Year
+2020
+PS> $dt.Month
+6
+
+# ファイル名作りたいとかは以下
+PS> > Get-Date -UFormat "%Y_%m_%d_%H%M_%S"
+2020_06_13_1510_53
+```
+
+ひよりみろっくがもう一年の半分が終わったというが6月はまだ終わってないじゃないか！
+という事でどれくらい終わったか確認。
+上の続き（dtを使う)
+
+```
+PS> $dt - (Get-Date -Year 2020 -Month 1 -Day 1)
+
+
+Days              : 163
+Hours             : 23
+Minutes           : 57
+Seconds           : 46
+Milliseconds      : 52
+Ticks             : 141694660521630
+TotalDays         : 163.998449677812
+TotalHours        : 3935.9627922675
+TotalMinutes      : 236157.76753605
+TotalSeconds      : 14169466.052163
+TotalMilliseconds : 14169466052.163
+
+PS> 163/365
+0.446575342465753 
+```
+
+まだ44.7%しか終わってないじゃないか。騙されるところだったぜ。
+
+
+どんなマシン使ってるの？
+```
+PS> Get-WmiObject -Class Win32_Processor
+
+
+Caption           : Intel64 Family 6 Model 61 Stepping 4
+DeviceID          : CPU0
+Manufacturer      : GenuineIntel
+MaxClockSpeed     : 1297
+Name              : Intel(R) Processor 5Y70 CPU @ 1.10GHz
+SocketDesignation : IC1
+
+
+
+PS> Get-WmiObject -Class Win32_Processor | Select-Object -Property Name, Number*
+
+Name                                  NumberOfCores NumberOfEnabledCore NumberOfLogicalProcessors
+----                                  ------------- ------------------- -------------------------
+Intel(R) Processor 5Y70 CPU @ 1.10GHz             2                   2                         4
+# 2コア。
+
+#メモリは？
+PS> Get-WmiObject -Class Win32_PhysicalMemory | measure-object capacity -Sum
+
+
+Count    : 3
+Average  :
+Sum      : 4311744512
+Maximum  :
+Minimum  :
+Property : capacity
+
+
+
+PS> 4311744512/(1024*1024*1024)
+4.015625
+
+# 4GBだって。
+```
+
+
+
+----
+
+メモ（そのうち消す）
 
 Documentsフォルダの下にpowershell_workというフォルダを作る。
 
 ```
 > cd Documents
-Documents> dir
+Documents> ls
 ...
 Documents> mkdir powershell_work
 Documents> cd powershell_work
@@ -58,7 +205,7 @@ linux_intro_mlの中にcdする。
 ```
 > cd linu[ここでタブ]
 > cd .\linux_intro_ml\
-linux_intro_ml> dir
+linux_intro_ml> ls
 ...
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
@@ -82,7 +229,7 @@ linux_intro_ml/linux_intro_ml-masterの中のものをlinux_intro_ml/に移動�
 linux_intro_ml> mv linu[ここでタブ]
 linux_intro_ml> mv .\linux_intro_ml-master\
 linux_intro_ml> mv .\linux_intro_ml-master\* ./
-linux_intro_ml> dir
+linux_intro_ml> ls
 ...
 d-----       2020/06/12     23:11                linux_intro_ml-master
 -a----       2020/02/10     17:42             33 .gitignore
@@ -108,7 +255,7 @@ linux_intro_ml> rmdir .\linux_cmd.md
 ```
 linux_intro_ml> rmdir .\linux_cmd.md[ここでさらにタブ]
 linux_intro_ml> rmdir .\linux_intro_ml-master\
-linux_intro_ml> dir
+linux_intro_ml> ls
 ...
 Mode                LastWriteTime         Length Name
 ----                -------------         ------ ----
