@@ -95,6 +95,9 @@ hiyo_rock: <p>作業途中で昼寝すっかってなって起きたら作業内
 rakuda: <p>140、オレンジレンジくらい</p>
 hiyo_rock: <p>おはよう</p>
 yum: <p>音ゲーマーの感覚でBPM140前後が中速って前提で会話してたら噛み合わなかった</p>
+
+# GUIで表示する。
+PS> Invoke-WebRequest "https://mostodon.cloud/api/v1/timelines/public?local=1&limit=6" | %{ $_.Content } | ConvertFrom-Json |  %{ $names = $_.account.username; $conts = $_.content; 0..($names.Length-1) | %{ [pscustomobject]@{name=$names[$_]; contents=$conts[$_]}  } | Out-GridView }
 ```
 
 csvを取ってきてちょろっと処理。
