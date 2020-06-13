@@ -5,40 +5,6 @@
 `PS>`のあとにあるコマンドをタイプしてEnterしてみてください。
 
 
-chromeがどれくらいメモリを使っているか。
-```
-PS> Get-Process | ?{ $_ -match "chrome" }
-
-Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
--------  ------    -----      -----     ------     --  -- -----------
-    283      19    46444      43444      29.64    316   1 chrome
-    384      28    59048      72088      11.91    808   1 chrome
-    233      16    19632      26776       3.11   1832   1 chrome
-    329      20    43644      66788      12.23   3452   1 chrome
-    322      21    44920      54024      59.36   3460   1 chrome
-...
-
-PS> Get-Process | ?{ $_ -match "chrome" } | measure-object WS -Sum
-
-Count    : 34
-Average  :
-Sum      : 1676832768
-Maximum  :
-Minimum  :
-Property : WS
-
-# 1676832768って何ギガ？
-PS> 1676832768/(1024*1024*1024)
-1.56167221069336
-
-# 1.56GBだそうで。
-
-# 以下みたいな書き方も出来る。
-PS> 1676832768/1GB
-1.56167221069336
-```
-
-
 
 今日は何日？
 ```
@@ -122,7 +88,105 @@ PS> 4311744512/1GB
 4.015625
 
 # 4GBだって。
+
+# ハードディスクは？
+PS> Get-PSDrive | Where Used
+Get-PSDrive | ?{ $_.Used }
+
+Name           Used (GB)     Free (GB) Provider      Root
+----           ---------     --------- --------      ----
+C                 303.05        161.52 FileSystem    C:\ 
+
+# 合計何ギガ？
+PS> Get-PSDrive | ?{ $_.Used } | %{ "$($_.Name): $(($_.Used+$_.Free)/1GB)GB" }
+C: 464.578170776367GB
+
+# 464GBだって。
+
+# OSは？
+> Get-WmiObject -Class Win32_OperatingSystem
+
+
+SystemDirectory : C:\WINDOWS\system32
+Organization    :
+BuildNumber     : 18362
+RegisteredUser  : CF-RZ4
+SerialNumber    : 00330-80000-00000-XXXXX
+Version         : 10.0.18362
+
+# Wn10、まぁそれはそう。
+
+# 最近あてたWindows Update
+PS> Get-WmiObject -Class Win32_QuickFixEngineering | sort -Descending -Property InstalledOn | head
+
+Source        Description      HotFixID      InstalledBy          InstalledOn
+------        -----------      --------      -----------          -----------
+LETS-NOTE-RZ4 Security Update  KB4560959     NT AUTHORITY\SYSTEM  2020/06/12 0:00:00
+LETS-NOTE-RZ4 Security Update  KB4561600     NT AUTHORITY\SYSTEM  2020/06/12 0:00:00
+LETS-NOTE-RZ4 Update           KB4560960     NT AUTHORITY\SYSTEM  2020/06/12 0:00:00
+LETS-NOTE-RZ4 Update           KB4552931     NT AUTHORITY\SYSTEM  2020/05/14 0:00:00
+LETS-NOTE-RZ4 Security Update  KB4552152     NT AUTHORITY\SYSTEM  2020/04/27 0:00:00
+LETS-NOTE-RZ4 Security Update  KB4541338     NT AUTHORITY\SYSTEM  2020/03/26 0:00:00
+LETS-NOTE-RZ4 Security Update  KB4524244     NT AUTHORITY\SYSTEM  2020/02/14 0:00:00
+
+
+# BIOSは？（ってプログラマしか興味持たないか）
+PS> Get-WmiObject -Class Win32_BIOS
+
+
+SMBIOSBIOSVersion : V1.00L14
+Manufacturer      : American Megatrends Inc.
+Name              : V1.00L14
+SerialNumber      : 5CKSA32887
+Version           : MATBIO - 1072009
+
+
+# どこ製？
+PS> Get-WmiObject -Class Win32_ComputerSystem
+
+
+Domain              : WORKGROUP
+Manufacturer        : Panasonic Corporation
+Model               : CFRZ4-1
+Name                : LETS-NOTE-RZ4
+PrimaryOwnerName    : CF-RZ4
+TotalPhysicalMemory : 4180226048
+
 ```
+
+chromeがどれくらいメモリを使っているか。
+```
+PS> Get-Process | ?{ $_ -match "chrome" }
+
+Handles  NPM(K)    PM(K)      WS(K)     CPU(s)     Id  SI ProcessName
+-------  ------    -----      -----     ------     --  -- -----------
+    283      19    46444      43444      29.64    316   1 chrome
+    384      28    59048      72088      11.91    808   1 chrome
+    233      16    19632      26776       3.11   1832   1 chrome
+    329      20    43644      66788      12.23   3452   1 chrome
+    322      21    44920      54024      59.36   3460   1 chrome
+...
+
+PS> Get-Process | ?{ $_ -match "chrome" } | measure-object WS -Sum
+
+Count    : 34
+Average  :
+Sum      : 1676832768
+Maximum  :
+Minimum  :
+Property : WS
+
+# 1676832768って何ギガ？
+PS> 1676832768/1GB
+1.56167221069336
+
+# 1.56GBだそうで。
+
+# 以下みたいな書き方も出来る。
+PS> 1676832768/(1024*1024*1024)
+1.56167221069336
+```
+
 
 ファイルのサイズの合計
 ```
