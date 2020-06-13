@@ -315,7 +315,7 @@ PS> get-process -Name calc* | Stop-Process
 
 
 
-ファイルのサイズの合計
+ファイルのサイズの合計(適当なディレクトリで)
 ```
 PS> ls
 Mode                LastWriteTime         Length Name
