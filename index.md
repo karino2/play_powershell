@@ -1,31 +1,9 @@
 
 - [このシリーズのコンセプト](concept.md)
 
+シャープで始まる行はコメント、つまり単なる解説です。
+`PS>`のあとにあるコマンドをタイプしてEnterしてみてください。
 
-ファイルのサイズの合計
-```
-PS> ls
-Mode                LastWriteTime         Length Name
-----                -------------         ------ ----
--a----       2020/02/10     17:42             33 .gitignore
--a----       2020/02/10     17:42           7987 index.md
--a----       2020/02/10     17:42          27676 linux_cmd.md
--a----       2020/02/10     17:42           1092 machine_admin.md
--a----       2020/02/10     17:42            254 other_cmd.md
--a----       2020/02/10     17:42          24968 shell_intro.md
--a----       2020/02/10     17:42            192 sync.sh
--a----       2020/02/10     17:42          41712 text_op.md
--a----       2020/02/10     17:42           1793 _config.yml
-
-PS> ls | measure-object Length -Sum
-
-Count    : 9
-Average  :
-Sum      : 105707
-Maximum  :
-Minimum  :
-Property : Length
-```
 
 chromeがどれくらいメモリを使っているか。
 ```
@@ -54,6 +32,10 @@ PS> 1676832768/(1024*1024*1024)
 1.56167221069336
 
 # 1.56GBだそうで。
+
+# 以下みたいな書き方も出来る。
+PS> 1676832768/1GB
+1.56167221069336
 ```
 
 
@@ -136,10 +118,35 @@ Property : capacity
 
 
 
-PS> 4311744512/(1024*1024*1024)
+PS> 4311744512/1GB
 4.015625
 
 # 4GBだって。
+```
+
+ファイルのサイズの合計
+```
+PS> ls
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----       2020/02/10     17:42             33 .gitignore
+-a----       2020/02/10     17:42           7987 index.md
+-a----       2020/02/10     17:42          27676 linux_cmd.md
+-a----       2020/02/10     17:42           1092 machine_admin.md
+-a----       2020/02/10     17:42            254 other_cmd.md
+-a----       2020/02/10     17:42          24968 shell_intro.md
+-a----       2020/02/10     17:42            192 sync.sh
+-a----       2020/02/10     17:42          41712 text_op.md
+-a----       2020/02/10     17:42           1793 _config.yml
+
+PS> ls | measure-object Length -Sum
+
+Count    : 9
+Average  :
+Sum      : 105707
+Maximum  :
+Minimum  :
+Property : Length
 ```
 
 
