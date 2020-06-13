@@ -35,6 +35,7 @@ plugins:
 header_pages:
   - index.md
   - concept.md
+  - tryit.md
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
