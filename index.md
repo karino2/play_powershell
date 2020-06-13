@@ -5,6 +5,42 @@
 `PS>`のあとにあるコマンドをタイプしてEnterしてみてください。
 
 
+```
+# 1から15まで足す
+PS> 1..15 | Measure-Object -Sum
+
+Count    : 15
+Average  :
+Sum      : 120
+Maximum  :
+Minimum  :
+Property :
+
+# 00から15までの連番のファイル名を出力する（今回はただプリントするだけ）
+PS> 0..15 | %{ "mostodon_cloud_{0:00d}.txt" -f $_ }
+mostodon_cloud_00d.txt
+mostodon_cloud_01d.txt
+mostodon_cloud_02d.txt
+mostodon_cloud_03d.txt
+mostodon_cloud_04d.txt
+mostodon_cloud_05d.txt
+mostodon_cloud_06d.txt
+mostodon_cloud_07d.txt
+mostodon_cloud_08d.txt
+mostodon_cloud_09d.txt
+mostodon_cloud_10d.txt
+mostodon_cloud_11d.txt
+mostodon_cloud_12d.txt
+mostodon_cloud_13d.txt
+mostodon_cloud_14d.txt
+mostodon_cloud_15d.txt
+
+# 1234は16進数ではいくつ？（プログラマしか知りたくならないか）
+PS> "0x{0:X}" -f 1234
+0x4D2
+
+```
+
 
 今日は何日？
 ```
@@ -172,6 +208,22 @@ StartTime             : 20200612132106.987116+540
 # 2020年6月12日から。
 ```
 
+ググる
+```
+PS> $ie = new-object -ComObject "InternetExplorer.Application"
+PS> $ie.Visible = $true
+PS> $ie.navigate("https://www.google.co.jp")
+PS> $inp = $ie.Document.getElementsByName("q")
+PS> $btn = $ie.Document.getElementsByName("btnK")
+PS> $inp[0].value = "酒はオワコン"
+PS> $btn[0].click()
+# これでIEで検索してあるはず。
+
+# 終了する時はバツボタンでもいいけど、以下でもいい
+PS> $ie.quit()
+```
+
+
 デスクトップに「苔鯖notepad」という名前のショートカットを作る。中身は単なるnotepad。
 
 ```
@@ -224,8 +276,10 @@ PS> 1676832768/(1024*1024*1024)
 PS> calc
 
 # 電卓を閉じる。calcで始まる他のプロセスがあったら閉じちゃうので注意。
+# なお、プロセスの名前はcalcじゃなくてCalculatorだったりする。
 PS> get-process -Name calc* | Stop-Process
 ```
+
 
 
 ファイルのサイズの合計
